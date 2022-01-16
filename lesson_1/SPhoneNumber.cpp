@@ -1,5 +1,6 @@
 #include "SPhoneNumber.h"
 #include <iostream>
+#include <tuple>
 
 void PhoneNumber::printPhoneNumber() const
 {
@@ -11,6 +12,15 @@ void PhoneNumber::printPhoneNumber() const
 
 bool PhoneNumber::operator==(const PhoneNumber &number)
 {
+  return std::tie(this->countryCode,
+		  this->cityCode,
+		  this->number,
+		  this->extensionNumber) ==
+    std::tie(number.countryCode,
+	     number.cityCode,
+	     number.number,
+	     number.extensionNumber);
+  /*
   if (this->countryCode != number.countryCode ||
       this->cityCode != number.cityCode ||
       this->number != number.number ||
@@ -18,10 +28,20 @@ bool PhoneNumber::operator==(const PhoneNumber &number)
     return false;
   else
     return true;
+  */
 }
 
 bool PhoneNumber::operator<(const PhoneNumber &number)
 {
+  return std::tie(this->countryCode,
+		  this->cityCode,
+		  this->number,
+		  this->extensionNumber) <
+    std::tie(number.countryCode,
+	     number.cityCode,
+	     number.number,
+	     number.extensionNumber);
+  /*
   // COUNTRY NUMBER COMPARISON
   if (this->countryCode < number.countryCode)
     return true;
@@ -42,6 +62,7 @@ bool PhoneNumber::operator<(const PhoneNumber &number)
     return true;
   else
     return false;
+  */
 }
 
 /*

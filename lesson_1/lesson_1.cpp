@@ -30,6 +30,7 @@ int main()
   number.countryCode = 7;
   number.cityCode = 981;
   number.number = 7947513;
+  number.extensionNumber = 1;
 
   number.printPhoneNumber();
 
@@ -37,6 +38,7 @@ int main()
   number2.countryCode = 7;
   number2.cityCode = 981;
   number2.number = 7947513;
+  number2.extensionNumber = 1;
 
   number2.printPhoneNumber();
 
