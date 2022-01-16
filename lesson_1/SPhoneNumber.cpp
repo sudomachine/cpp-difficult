@@ -1,13 +1,16 @@
+
 #include "SPhoneNumber.h"
 #include <iostream>
 #include <tuple>
 
-void PhoneNumber::printPhoneNumber() const
+std::ostream& operator<< (std::ostream& out, const PhoneNumber& phoneNumber)
 {
-  std::cout << "+" << this->countryCode << "(" << this->cityCode << ")" << this->number;
-  if (this->extensionNumber != -1)
-    std::cout << " " << this->extensionNumber;
-  std::cout << std::endl;
+  out << "+" << phoneNumber.countryCode \
+      << "(" << phoneNumber.cityCode << ")" \
+      << phoneNumber.number;
+  if (phoneNumber.extensionNumber)
+    out << " " << phoneNumber.extensionNumber;
+  return out;
 }
 
 bool PhoneNumber::operator==(const PhoneNumber &number)
@@ -64,15 +67,3 @@ bool PhoneNumber::operator<(const PhoneNumber &number)
     return false;
   */
 }
-
-/*
-struct PhoneNumber
-{
-  unsigned short countryCode;
-  unsigned short cityCode;
-  unsigned int number;
-  unsigned int extensionNumber = -1;
-  void printPhoneNumber() const;
-  bool operator<(const PhoneNumber &phoneNumber);
-  bool operator==(const PhoneNumber &phoneNumber);
-  };*/

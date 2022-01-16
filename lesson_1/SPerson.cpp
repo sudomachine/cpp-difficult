@@ -29,20 +29,15 @@ bool compareNames(const char* name1, const char* name2)
   return comparisonResult;
 }
 
-void Person::printPersonData() const
+std::ostream& operator<< (std::ostream& out, const Person& person)
 {
-  if (!firstName || !secondName)
-    std::cout << "There is no first or second name or both!" << std::endl;
-  else
-    {
-      std::cout << secondName << " " << firstName;
-      if (thirdName)
-	std::cout << thirdName;
-      std::cout << std::endl;
-    }
+  out << person.secondName << " " << person.firstName;
+  if (person.thirdName)
+    out << " " << person.thirdName;
+  return out;
 }
 
-bool Person::operator<(const Person &person)
+bool Person::operator< (const Person &person)
 {
   /*
   // using tie comparison compiler compare char[] pointers ! wrong comparison
