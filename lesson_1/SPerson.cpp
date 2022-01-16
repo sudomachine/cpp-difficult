@@ -32,14 +32,13 @@ bool compareNames(const char* name1, const char* name2)
 void Person::printPersonData() const
 {
   if (!firstName || !secondName)
-    std::cout << "There is no first or second name!" << std::endl;
+    std::cout << "There is no first or second name or both!" << std::endl;
   else
     {
-      std::cout << "Person data" << std::endl \
-		<< "First name: " << firstName << std::endl	\
-		<< "Second name: " << secondName << std::endl;
+      std::cout << secondName << " " << firstName;
       if (thirdName)
-	std::cout << "Third name: " << thirdName << std::endl;
+	std::cout << thirdName;
+      std::cout << std::endl;
     }
 }
 
@@ -50,24 +49,9 @@ bool Person::operator<(const Person &person)
   return std::tie(this->firstName, this->secondName, this->thirdName) <
     std::tie(person.firstName, person.secondName, person.thirdName);
   */
-  // FIRST NAMES COMPARISON
-  unsigned i = 0; // index for cycle
-  while (this->firstName[i] != '\0' || person.firstName[i] != '\0')
-    {
-      if (this->firstName[i] < person.firstName[i])
-	return true;
-      else if (this->firstName[i] > person.firstName[i])
-	return false;
-      ++i;
-    }
-  // if this name bigger than person name OR on the contrary
-  if (this->firstName[i] == '\0' && person.firstName[i] != '\0')
-    return true; // this name smaller than person name
-  else if (this->firstName[i] != '\0' && person.firstName[i] == '\0')
-    return false; // this name bigger than person name
- 
+  
   // SECOND NAMES COMPARISON
-  i = 0;
+  unsigned i = 0; // index for cycle
   while (this->secondName[i] != '\0' || person.secondName[i] != '\0')
     {
       if (this->secondName[i] < person.secondName[i])
@@ -82,6 +66,22 @@ bool Person::operator<(const Person &person)
   else if (this->secondName[i] != '\0' && person.secondName[i] == '\0')
     return false; // this name bigger than person name
 
+  // FIRST NAMES COMPARISON
+  i = 0;
+  while (this->firstName[i] != '\0' || person.firstName[i] != '\0')
+    {
+      if (this->firstName[i] < person.firstName[i])
+	return true;
+      else if (this->firstName[i] > person.firstName[i])
+	return false;
+      ++i;
+    }
+  // if this name bigger than person name OR on the contrary
+  if (this->firstName[i] == '\0' && person.firstName[i] != '\0')
+    return true; // this name smaller than person name
+  else if (this->firstName[i] != '\0' && person.firstName[i] == '\0')
+    return false; // this name bigger than person name
+ 
   // THIRD NAMES COMPARISON
   i = 0;
   // if one of third names there is not
@@ -114,12 +114,15 @@ bool Person::operator==(const Person &person)
   return std::tie(this->firstName, this->secondName, this->thirdName) ==
     std::tie(person.firstName, person.secondName, person.thirdName);
   */
-  // FIRST NAMES COMPARISON
-  if (!compareNames(this->firstName, person.firstName))
-    return false;
+
   // SECOND NAMES COMPARISON
-  else if (!compareNames(this->secondName, person.secondName))
+  if (!compareNames(this->secondName, person.secondName))
     return false;
+ 
+  // FIRST NAMES COMPARISON
+  else if (!compareNames(this->firstName, person.firstName))
+    return false;
+  
   // THIRD NAMES COMPARISON
   else if (!compareNames(this->thirdName, person.thirdName))
     return false;
