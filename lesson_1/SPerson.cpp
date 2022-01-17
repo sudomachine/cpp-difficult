@@ -29,6 +29,15 @@ bool compareNames(const char* name1, const char* name2)
   return comparisonResult;
 }
 
+Person::Person(const char* secondName,
+	       const char* firstName,
+	       const char* thirdName)
+{
+  this->secondName = secondName;
+  this->firstName = firstName;
+  this->thirdName = thirdName;
+}
+
 std::ostream& operator<< (std::ostream& out, const Person& person)
 {
   out << person.secondName << " " << person.firstName;
