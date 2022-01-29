@@ -71,36 +71,31 @@ void PhoneBook::sortByPhone()
   std::sort(PhoneBook::m_phoneBook->begin(), PhoneBook::m_phoneBook->end(), cmpNumbers);
 }
 
-std::tuple<std::string, PhoneNumber> PhoneBook::getPhoneNumber(const std::string secondName)
+std::optional<std::vector<PhoneNumber>> PhoneBook::getPhoneNumber(const std::string secondName)
 {
   // if not found
-  PhoneNumber phoneNumber(0,0,0,0);
-  std::string result = "not found";
-  unsigned int recordsCounter = 0;
+  std::vector<PhoneNumber> phoneNumbersList;
 
   for (const auto& record: *PhoneBook::m_phoneBook)
     {
       // found the same second name
       if (secondName == std::get<0>(record).secondName)
 	{
-	  recordsCounter += 1;
-	  if (recordsCounter == 1)
-	    {
-	      // if found 1 record
-	      phoneNumber = std::get<1>(record);
-	      result = "";
-	    }
+	  // if found 1 record
+	  phoneNumbersList.push_back(std::get<1>(record));
 	}
     }
 
-  if (recordsCounter > 1)
+  if (phoneNumbersList.size() > 0)
     {
-      // if found more than 1
-      result = "found more than 1";
-      phoneNumber = PhoneNumber(0,0,0,0);
+      // if found one or more
+      return phoneNumbersList;
     }
-  
-  return std::tie(result, phoneNumber);
+  else
+    {
+      // if not found
+      return std::nullopt;
+    }
 }
 
 void PhoneBook::changePhoneNumber(const Person& person, const PhoneNumber& newPhoneNumber)

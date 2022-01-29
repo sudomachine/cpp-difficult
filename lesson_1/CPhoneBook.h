@@ -7,6 +7,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <optional>
 
 
 class PhoneBook
@@ -20,7 +21,8 @@ class PhoneBook
   void sortByName();
   void sortByPhone();
   void changePhoneNumber(const Person&, const PhoneNumber&);
-  std::tuple<std::string, PhoneNumber> getPhoneNumber(std::string secondName);
+  // this func will be return vector of PhoneNumber objects (one or several) or empty
+  std::optional<std::vector<PhoneNumber>> getPhoneNumber(std::string secondName);
   std::vector<std::tuple<Person, PhoneNumber>>& getValue() const;
 };
 

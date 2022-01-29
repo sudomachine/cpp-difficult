@@ -9,7 +9,7 @@
 
 int main()
 {
-  /*
+  
   // test
   Person p("Sudakov", "Andrey");
   std::cout << Person("Jhon", "Sinna") << std::endl;
@@ -56,10 +56,17 @@ int main()
 		       PhoneNumber(7, 981, 7947513));
   std::cout << "RESULT:" << std::endl << pb << std::endl;
 
-  std::tuple<std::string, PhoneNumber> tAnswer = pb.getPhoneNumber("Acetov");
-  std::cout << "\nRESULT:\n" << std::get<0>(tAnswer) << "\n" << std::get<1>(tAnswer) << std::endl;
-  */
-
+  std::cout << "\nTEST getPhoneNumber" << std::endl;
+  auto vNumbers = pb.getPhoneNumber("Zemelis");
+  if (vNumbers)
+    {
+      for (const auto& number: *vNumbers)
+	{
+	  std::cout << number << std::endl;
+	}
+    }
+  
+  /*
   std::ifstream file("fileForRead");
   PhoneBook book(file);
   std::cout << book << std::endl;
@@ -98,4 +105,5 @@ int main()
   book.changePhoneNumber(Person("Kovalev", "Denis", "Olegovich"),
 			 PhoneNumber(16, 465, 9155448, 13));
   std::cout << book << std::endl;
+  */
 }
