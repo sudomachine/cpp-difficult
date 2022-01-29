@@ -3,10 +3,13 @@
 #include "SPhoneNumber.h"
 #include "CPhoneBook.h"
 #include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <tuple>
 
 int main()
 {
-  
+  /*
   // test
   Person p("Sudakov", "Andrey");
   std::cout << Person("Jhon", "Sinna") << std::endl;
@@ -29,9 +32,70 @@ int main()
   std::cout << (number < number2) << std::endl;
   std::cout << (number == number2) << std::endl;
   
+  
   // test
+  std::ifstream file("fileForRead");
 
-  //PhoneBook pb;
+  if (!file)
+    {
+      std::cout << "File is not open!" << std::endl;
+      return 0;
+    }
 
-  return 0;
+  PhoneBook pb(file);
+  
+  std::cout << "PHONE BOOK\n" << pb << std::endl;
+
+  pb.sortByName();
+  std::cout << "SORTED by NAME\n" << pb << std::endl;
+
+  pb.sortByPhone();
+  std::cout << "SORTED by PHONE\n" << pb << std::endl;
+  
+  pb.changePhoneNumber(Person("Sudakov", "Andrey", "Olegovich"),
+		       PhoneNumber(7, 981, 7947513));
+  std::cout << "RESULT:" << std::endl << pb << std::endl;
+
+  std::tuple<std::string, PhoneNumber> tAnswer = pb.getPhoneNumber("Acetov");
+  std::cout << "\nRESULT:\n" << std::get<0>(tAnswer) << "\n" << std::get<1>(tAnswer) << std::endl;
+  */
+
+  std::ifstream file("fileForRead");
+  PhoneBook book(file);
+  std::cout << book << std::endl;
+
+  std::cout << "------SortByPhone------" << std::endl;
+  book.sortByPhone();
+  std::cout << book << std::endl;
+
+  std::cout << "------SortByName------" << std::endl;
+  book.sortByName();
+  std::cout << book << std::endl;
+
+  std::cout << "------GetPhoneNumber------" << std::endl;
+  auto printPhoneNumber = [&book](const std::string& secondName)
+			  {
+			    std::cout << secondName << "\t";
+			    auto answer = book.getPhoneNumber(secondName);
+			    if (get<0>(answer).empty())
+			      {
+				std::cout << get<1>(answer);
+			      }
+			    else
+			      {
+				std::cout << get<0>(answer);
+			      }
+			    std::cout << std::endl;
+			  };
+
+  printPhoneNumber("Sudakov");
+  printPhoneNumber("Achmetov");
+  printPhoneNumber("Ivanov");
+
+  std::cout << "------changePhoneNumber------" << std::endl;
+  book.changePhoneNumber(Person("Zemelis", "Olga", "Vyacheslavovna"),
+			 PhoneNumber(7, 123, 15344458));
+  book.changePhoneNumber(Person("Kovalev", "Denis", "Olegovich"),
+			 PhoneNumber(16, 465, 9155448, 13));
+  std::cout << book << std::endl;
 }

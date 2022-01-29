@@ -2,8 +2,13 @@
 #include <iostream>
 #include <tuple>
 
-bool compareNames(const char* name1, const char* name2)
+bool compareNames(std::string name1, std::string name2)
 {
+  if (name1 == name2)
+    return true;
+  else
+    return false;
+  /*
   // for comparison of third names
   // both are nullptr
   if (!name1 && !name2)
@@ -27,11 +32,12 @@ bool compareNames(const char* name1, const char* name2)
   if (name1[i] != name2[i])
     comparisonResult = false;
   return comparisonResult;
+  */
 }
 
-Person::Person(const char* secondName,
-	       const char* firstName,
-	       const char* thirdName)
+Person::Person(std::string secondName,
+	       std::string firstName,
+	       std::string thirdName)
 {
   this->secondName = secondName;
   this->firstName = firstName;
@@ -41,19 +47,19 @@ Person::Person(const char* secondName,
 std::ostream& operator<< (std::ostream& out, const Person& person)
 {
   out << person.secondName << " " << person.firstName;
-  if (person.thirdName)
+  if (person.thirdName != "")
     out << " " << person.thirdName;
   return out;
 }
 
-bool Person::operator< (const Person &person)
+bool Person::operator< (const Person &person) const
 {
-  /*
-  // using tie comparison compiler compare char[] pointers ! wrong comparison
-  return std::tie(this->firstName, this->secondName, this->thirdName) <
-    std::tie(person.firstName, person.secondName, person.thirdName);
-  */
   
+  // using tie comparison compiler compare char[] pointers ! wrong comparison
+  return std::tie(this->secondName, this->firstName, this->thirdName) <
+    std::tie(person.secondName, person.firstName, person.thirdName);
+  
+  /*
   // SECOND NAMES COMPARISON
   unsigned i = 0; // index for cycle
   while (this->secondName[i] != '\0' || person.secondName[i] != '\0')
@@ -109,16 +115,17 @@ bool Person::operator< (const Person &person)
     return false; // this name bigger than person name
   
   return false;
+  */
 }
 
-bool Person::operator==(const Person &person)
+bool Person::operator==(const Person &person) const
 {
-  /*
+  
   // using tie comparison compiler compare char[] pointers ! wrong comparison
-  return std::tie(this->firstName, this->secondName, this->thirdName) ==
-    std::tie(person.firstName, person.secondName, person.thirdName);
-  */
-
+  return std::tie(this->secondName, this->firstName, this->thirdName) ==
+    std::tie(person.secondName, person.firstName, person.thirdName);
+  
+  /*
   // SECOND NAMES COMPARISON
   if (!compareNames(this->secondName, person.secondName))
     return false;
@@ -132,4 +139,5 @@ bool Person::operator==(const Person &person)
     return false;
   else
     return true;
+  */
 }

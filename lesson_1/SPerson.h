@@ -1,21 +1,22 @@
 
 #pragma once
 #include <iostream>
+#include <string>
 
 struct Person
 {
-  const char* secondName = nullptr;
-  const char* firstName = nullptr;
-  const char* thirdName = nullptr;
+  std::string secondName;
+  std::string firstName;
+  std::string thirdName;
 
-  Person(const char* secondName,
-	 const char* firstName,
-	 const char* thirdName = nullptr);
-  bool operator<(const Person &person);
-  bool operator==(const Person &person);
+  Person(std::string secondName,
+	 std::string firstName,
+	 std::string thirdName = "");
+  bool operator<(const Person &person) const;
+  bool operator==(const Person &person) const;
   friend std::ostream& operator<<(std::ostream& out, const Person& person);
 };
 
-bool compareNames(const char* name1, const char* name2);
+bool compareNames(std::string name1, std::string name2);
 
 
