@@ -12,35 +12,56 @@ PhoneBook::PhoneBook(std::ifstream &file)
     }
   
   // constr
-  PhoneBook::m_phoneBook = new std::vector<std::tuple<Person, PhoneNumber>>;
+  PhoneBook::m_phoneBook = new std::vector<std::pair<Person, PhoneNumber>>;
 
   // read file
   
   std::string sName, fName, tName, countryC, cityC, number, exNumber;
+  std::optional<int> oExNumber;
+  std::optional<std::string> oTName;
 
   while (file)
     {
       // read a row from file
       file >> sName >> fName >> tName >> countryC >> cityC >> number >> exNumber;
-      if (exNumber == "-") exNumber = "-1";
-      if (tName == "-") tName = "";
-
+      if (exNumber == "-")
+	{
+	  oExNumber = std::nullopt;
+	}
+      else
+	{
+	  oExNumber = std::stoi(exNumber);
+	}
+      if (tName == "-")
+	{
+	  oTName = std::nullopt;
+	}
+      else
+	{
+	  oTName = tName;
+	}
       // add Person and PhoneNumber objects to phone book
-      PhoneBook::m_phoneBook->push_back(std::tuple<Person, PhoneNumber> {Person(sName, fName, tName), PhoneNumber(std::stoi(countryC), std::stoi(cityC), std::stoi(number), std::stoi(exNumber))});
+      PhoneBook::m_phoneBook->push_back(std::pair<Person, PhoneNumber> {
+	  Person(sName, fName, oTName),
+	    PhoneNumber(std::stoi(countryC),
+			std::stoi(cityC),
+			std::stoi(number),
+			oExNumber)});
 
       // data FAIL !!!!!!!!!
       // read last row two times from file 
-      // std::cout << *this << std::endl;
     }
 }
 
 // FILE content
  /*
-Sudakov;Andrey;Alekseevich;7;981;7947513;-
-Achmetov;Vladimir;-;7;921;3278318;-
-Kovalev;Denis;Olegovich;7;981;2449040;6003
-Zemelis;Olga;Vyacheslavovna;7;906;2565709;-
-Zhavko;Stepan;-;7;921;2547859;-
+Sudakov Andrey Alekseevich 7 981 7947513 1
+Achmetov Vladimir - 7 921 3278318 -
+Kovalev Denis Olegovich 7 981 2449040 6003
+Zemelis Olga Vyacheslavovna 7 906 2565709 -
+Sudakov Oleg Alekseevich 7 981 1947513 1
+Sudakov Andrey Olegovich 8 981 7947513 1
+Zhavko Stepan - 7 921 2547859 -
 */
 
 PhoneBook::~PhoneBook()
@@ -51,10 +72,9 @@ PhoneBook::~PhoneBook()
 
 void PhoneBook::sortByName()
 {
-  // returns true if first name(t1) less than second name(t2)
-  auto cmpNames = [](std::tuple<Person, PhoneNumber> t1, std::tuple<Person, PhoneNumber> t2)
+  auto cmpNames = [](std::pair<Person, PhoneNumber> p1, std::pair<Person, PhoneNumber> p2)
 		  {
-		    return std::get<0>(t1) < std::get<0>(t2);
+		    return p1.first < p2.first;
 		  };
   // sort vector by name
   std::sort(PhoneBook::m_phoneBook->begin(), PhoneBook::m_phoneBook->end(), cmpNames);
@@ -62,16 +82,15 @@ void PhoneBook::sortByName()
 
 void PhoneBook::sortByPhone()
 {
-  // returns true if first number(t1) less than second number(t2)
-  auto cmpNumbers = [](std::tuple<Person, PhoneNumber> t1, std::tuple<Person, PhoneNumber> t2)
+  auto cmpNumbers = [](std::pair<Person, PhoneNumber> p1, std::pair<Person, PhoneNumber> p2)
 		    {
-		      return std::get<1>(t1) < std::get<1>(t2);
+		      return p1.second < p2.second;
 		    };
   // sort vector by phone
   std::sort(PhoneBook::m_phoneBook->begin(), PhoneBook::m_phoneBook->end(), cmpNumbers);
 }
 
-std::optional<std::vector<PhoneNumber>> PhoneBook::getPhoneNumber(const std::string secondName)
+std::optional<std::vector<PhoneNumber>> PhoneBook::getPhoneNumber(const std::string& secondName)
 {
   // if not found
   std::vector<PhoneNumber> phoneNumbersList;
@@ -79,10 +98,10 @@ std::optional<std::vector<PhoneNumber>> PhoneBook::getPhoneNumber(const std::str
   for (const auto& record: *PhoneBook::m_phoneBook)
     {
       // found the same second name
-      if (secondName == std::get<0>(record).secondName)
+      if (secondName == record.first.secondName)
 	{
 	  // if found 1 record
-	  phoneNumbersList.push_back(std::get<1>(record));
+	  phoneNumbersList.push_back(record.second);
 	}
     }
 
@@ -105,29 +124,26 @@ void PhoneBook::changePhoneNumber(const Person& person, const PhoneNumber& newPh
     {
       // take Person obj from phone book and compare with this name
       // 2.1 change number if there
-      if (std::get<0>(record) == person)
+      if (record.first == person)
 	{
 	  // phoneNumber from phone book = new number
-	  std::get<1>(record) = newPhoneNumber;
+	  record.second = newPhoneNumber;
 	  break;
 	  }
       // 2.2 do not anything
     }
 }
 
-std::vector<std::tuple<Person, PhoneNumber>>& PhoneBook::getValue() const
+std::vector<std::pair<Person, PhoneNumber>>& PhoneBook::getValue() const
 {
   return *PhoneBook::m_phoneBook;
-  // don't understand why use dereferencing a pointer
-  // if must return the link to vector
-  // because m_phoneBook is a pointer (CPhoneBook.h L15)
 }
 
 std::ostream& operator<< (std::ostream& out, const PhoneBook& phoneBook)
 {
-  for (const auto& contact: phoneBook.getValue())
+  for (const auto& record: phoneBook.getValue())
     {
-      out << std::get<0>(contact) << ", " << std::get<1>(contact) << std::endl;
+      out << record.first << ", " << record.second << std::endl;
     }
   return out;
 }

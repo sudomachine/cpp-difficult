@@ -6,7 +6,7 @@
 PhoneNumber::PhoneNumber(int countryCode,
 			 int cityCode,
 			 int number,
-			 int extensionNumber)
+			 std::optional<int> extensionNumber)
 {
   this->countryCode = countryCode;
   this->cityCode = cityCode;
@@ -19,12 +19,12 @@ std::ostream& operator<<(std::ostream& out, const PhoneNumber& phoneNumber)
   out << "+" << phoneNumber.countryCode \
       << "(" << phoneNumber.cityCode << ")" \
       << phoneNumber.number;
-  if (phoneNumber.extensionNumber >= 0)
-    out << " " << phoneNumber.extensionNumber;
+  if (phoneNumber.extensionNumber.has_value())
+    out << " " << phoneNumber.extensionNumber.value();
   return out;
 }
 
-bool PhoneNumber::operator==(const PhoneNumber &number) const
+bool PhoneNumber::operator==(const PhoneNumber& number) const
 {
   return std::tie(this->countryCode,
 		  this->cityCode,
@@ -36,7 +36,7 @@ bool PhoneNumber::operator==(const PhoneNumber &number) const
 	     number.extensionNumber);
 }
 
-bool PhoneNumber::operator<(const PhoneNumber &number) const
+bool PhoneNumber::operator<(const PhoneNumber& number) const
 {
   return std::tie(this->countryCode,
 		  this->cityCode,

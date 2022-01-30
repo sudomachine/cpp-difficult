@@ -2,18 +2,19 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <optional>
 
 struct Person
 {
   std::string secondName;
   std::string firstName;
-  std::string thirdName;
+  std::optional<std::string> thirdName;
 
   Person(std::string secondName,
 	 std::string firstName,
-	 std::string thirdName = "");
-  bool operator<(const Person &person) const;
-  bool operator==(const Person &person) const;
+	 std::optional<std::string> thirdName = std::nullopt);
+  bool operator<(const Person& person) const;
+  bool operator==(const Person& person) const;
   friend std::ostream& operator<<(std::ostream& out, const Person& person);
 };
 

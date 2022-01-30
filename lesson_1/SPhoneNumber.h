@@ -2,18 +2,19 @@
 #pragma once
 
 #include <iostream>
+#include <optional>
 
 struct PhoneNumber
 {
   int countryCode;
   int cityCode;
   int number;
-  int extensionNumber;
+  std::optional<int> extensionNumber;
 
   PhoneNumber(int countryCode,
 	      int cityCode,
 	      int number,
-	      int extensionNumber = -1);
+	      std::optional<int> extensionNumber = std::nullopt);
   bool operator<(const PhoneNumber& phoneNumber) const;
   bool operator==(const PhoneNumber& phoneNumber) const;
   PhoneNumber& operator=(const PhoneNumber& phoneNumber);

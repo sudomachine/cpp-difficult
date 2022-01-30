@@ -13,17 +13,17 @@
 class PhoneBook
 {
  private:
-  std::vector<std::tuple<Person, PhoneNumber>> *m_phoneBook;
+  std::vector<std::pair<Person, PhoneNumber>> *m_phoneBook;
  public:
-  PhoneBook(std::ifstream &file);
+  PhoneBook(std::ifstream&);
   PhoneBook();
   ~PhoneBook();
   void sortByName();
   void sortByPhone();
   void changePhoneNumber(const Person&, const PhoneNumber&);
-  // this func will be return vector of PhoneNumber objects (one or several) or empty
-  std::optional<std::vector<PhoneNumber>> getPhoneNumber(std::string secondName);
-  std::vector<std::tuple<Person, PhoneNumber>>& getValue() const;
+  // this func will be return vector of PhoneNumber objects (one or several) or nullopt
+  std::optional<std::vector<PhoneNumber>> getPhoneNumber(const std::string&);
+  std::vector<std::pair<Person, PhoneNumber>>& getValue() const;
 };
 
-std::ostream& operator<< (std::ostream& out, const PhoneBook& phoneBook);
+std::ostream& operator<< (std::ostream&, const PhoneBook&);
